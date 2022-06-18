@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ProductsSerializer
 from .models import Products
+from products import serializers
 
 
 @api_view(['GET', 'POST'])
@@ -19,6 +20,16 @@ def products_list(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
        
+
+@api_view(['GET'])
+def product_detail(request, pk):
+    try:
+        product = Products.objects.get(pk=pk)
+        serializer = ProductsSerializer(product);
+        return Response(serializer.data)
+        
+    except Products.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND);
        
 
 
